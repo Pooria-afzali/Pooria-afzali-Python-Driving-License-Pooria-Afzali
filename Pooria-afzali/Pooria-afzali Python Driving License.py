@@ -84,10 +84,10 @@ plt.figure(figsize=(12, 6))
 
 
 #gtting crate values from the C-rate column
-c_rates=set(data['C-rate'])
+c_rates= data['C-rate'].unique()
 
 # going through each C-rate and plot the corresponding data
-for x, c_rate in enumerate(c_rates):
+for c_rate in c_rates:
     #filtering the data for the current C-rate
     cycle_data = data[data['C-rate']==c_rate]
 
@@ -109,6 +109,7 @@ plt.grid(False)
 plt.show()
 
 
+
 # In[38]:
 
 
@@ -124,15 +125,9 @@ mean_per_crate =nucleation_overpotential_per_crate.mean()
 #standard deviation for each C-rate group
 std_per_crate =nucleation_overpotential_per_crate.std()
 
-#Combining the mean and std into a DataFrame
-mean_and_std_per_crate= pd.DataFrame({'mean': mean_per_crate, 'std': std_per_crate})
-
-#define index for each  C-rate values and make it part of the DataFrame
-calculations_per_crate =  mean_and_std_per_crate.reset_index()
-
 #plot of average nucleation overpotential versus Crate with error bars
 plt.figure(figsize=(12, 6))
-plt.errorbar(calculations_per_crate['C-rate'], calculations_per_crate['mean'], yerr=calculations_per_crate['std'],
+plt.errorbar(c_rates, mean_per_crate, yerr=std_per_crate,
 marker='o', linestyle='-', capsize=4, label='Average Nucleation Overpotential')
 plt.xlabel('C-rate')
 plt.ylabel('Nucleation Overpotential (V)')
@@ -143,8 +138,7 @@ plt.show()
 
 #Printing the mean value for each crate
 
-print(calculations_per_crate[['C-rate', 'mean']])    
-
+print(calculations_per_crate[['C-rate', 'mean']]) 
 
 # In[ ]:
 
